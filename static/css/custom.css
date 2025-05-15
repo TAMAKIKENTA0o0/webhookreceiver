@@ -1,0 +1,129 @@
+/* Custom styles for webhook receiver */
+
+/* Code example styling */
+.code-example {
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+.code-example pre {
+    margin-bottom: 0;
+    color: #e6e1dc;
+    white-space: pre-wrap;
+    font-size: 0.85rem;
+}
+
+/* Webhook content styling */
+.webhook-content {
+    max-height: 200px;
+    overflow-y: auto;
+    font-size: 0.85rem;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    margin-bottom: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* Clickable copy styling */
+.clickable-copy {
+    cursor: pointer;
+    transition: background-color 0.2s;
+    position: relative;
+}
+
+.clickable-copy:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.clickable-copy:active {
+    background-color: rgba(0, 123, 255, 0.2);
+}
+
+.url-text {
+    color: #0d6efd;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    padding: 0.1rem 0.2rem;
+    border-radius: 0.25rem;
+}
+
+/* Tooltip for copy feedback */
+.copy-tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.copy-tooltip.show {
+    opacity: 1;
+}
+
+/* Webhook actions list */
+.webhook-actions {
+    padding-left: 1.2rem;
+    margin-bottom: 0;
+    font-size: 0.85rem;
+}
+
+/* Card hover effects */
+.card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Card headers with icons */
+.card-header i {
+    margin-right: 5px;
+}
+
+/* Table responsiveness */
+.table-responsive {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+/* Feature list styling */
+.list-group-item i {
+    font-size: 1.2rem;
+    min-width: 24px;
+}
+
+/* Make pre blocks look nicer */
+pre {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}

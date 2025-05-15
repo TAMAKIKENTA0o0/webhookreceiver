@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webhook Receiver</title>
+    <!-- Replit-themed Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+</head>
+<body>
+    <div class="container py-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card bg-dark">
+                    <div class="card-body">
+                        <h1 class="card-title">
+                            <i class="fas fa-webhook me-2"></i>Webhook Receiver
+                        </h1>
+                        <p class="card-text lead">
+                            Receive webhooks, copy content to clipboard, and automatically perform smart actions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="row">
+                <div class="col-12">
+                    {% for message in messages %}
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <i class="fas fa-info-circle me-2"></i>Webhook Endpoint
+                    </div>
+                    <div class="card-body">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="webhook-url" readonly 
+                                   value="{{ request.url_root }}webhook">
+                            <button class="btn btn-outline-secondary" type="button" id="copy-webhook-url">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <small class="text-muted mt-2 d-block">
+                            Send a POST request to this URL to trigger the webhook
+                        </small>
+                    </div>
+                </div>
+                
+
+
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <i class="fas fa-vial me-2"></i>Test Webhook
+                    </div>
+                    <div class="card-body">
+                        <form action="{{ url_for('test_webhook') }}" method="post">
+                            <div class="mb-3">
+                                <label for="content" class="form-label">Content</label>
+                                <textarea class="form-control" id="content" name="content" rows="3" 
+                                          placeholder="Enter text or paste URL to test"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-paper-plane me-1"></i> Send Test Webhook
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fas fa-lightbulb me-2"></i>Features
+                        </div>
+                        <a href="{{ url_for('download_files') }}" class="btn btn-sm btn-light">
+                            <i class="fas fa-download me-1"></i>下载所有文件
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Smart Actions</h5>
+                        <ul class="list-group mb-4">
+                            <li class="list-group-item d-flex align-items-center">
+                                <i class="fas fa-clipboard me-3 text-primary"></i>
+                                <div>
+                                    <strong>Copy to Clipboard</strong>
+                                    <p class="mb-0 small">All webhook content is automatically copied to your clipboard</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center">
+                                <i class="fas fa-external-link-alt me-3 text-primary"></i>
+                                <div>
+                                    <strong>URL Detection</strong>
+                                    <p class="mb-0 small">URLs are automatically detected and shown in the history</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center">
+                                <i class="fas fa-file-code me-3 text-primary"></i>
+                                <div>
+                                    <strong>Format Support</strong>
+                                    <p class="mb-0 small">Handles JSON, form data, and plain text webhooks</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center">
+                                <i class="fas fa-download me-3 text-primary"></i>
+                                <div>
+                                    <strong>Download Code</strong>
+                                    <p class="mb-0 small">Download all code files to run this application locally</p>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <h5 class="card-title">Usage Examples</h5>
+                        <div class="code-example p-3 bg-dark">
+                            <pre class="mb-1"><code>curl -X POST -H "Content-Type: text/plain" \
+    -d "Check out https://example.com" \
+    {{ request.url_root }}webhook</code></pre>
+                        </div>
+                        
+                        <div class="code-example p-3 bg-dark mt-3">
+                            <pre class="mb-1"><code>curl -X POST -H "Content-Type: application/json" \
+    -d '{"url": "https://example.com", "message": "Visit this site"}' \
+    {{ request.url_root }}webhook</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center bg-secondary text-white">
+                        <div>
+                            <i class="fas fa-history me-2"></i>Webhook History
+                        </div>
+                        <form action="{{ url_for('clear_history') }}" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash me-1"></i>Clear History
+                            </button>
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        {% if webhooks %}
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Time</th>
+                                            <th>Content</th>
+                                            <th>Format</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for webhook in webhooks %}
+                                        <tr {% if webhook.get('is_test') %}class="table-info"{% elif webhook.get('is_error') %}class="table-danger"{% endif %}>
+                                            <td>
+                                                {{ webhook.timestamp }}
+                                                {% if webhook.get('source_ip') %}
+                                                <br><small class="text-muted">IP: {{ webhook.get('source_ip') }}</small>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if webhook.content_format == 'json' %}
+                                                    <pre class="webhook-content clickable-copy" title="点击复制内容">{{ webhook.content | tojson(indent=2) }}</pre>
+                                                {% else %}
+                                                    <pre class="webhook-content clickable-copy" title="点击复制内容">{{ webhook.content }}</pre>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <span class="badge 
+                                                    {% if webhook.content_format == 'json' %}
+                                                        bg-success
+                                                    {% elif webhook.content_format == 'form' %}
+                                                        bg-primary
+                                                    {% else %}
+                                                        bg-secondary
+                                                    {% endif %}
+                                                ">
+                                                    {{ webhook.content_format }}
+                                                </span>
+                                                {% if webhook.get('is_test') %}
+                                                    <span class="badge bg-info">Test</span>
+                                                {% elif webhook.get('is_error') %}
+                                                    <span class="badge bg-danger">Error</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if webhook.actions %}
+                                                    <ul class="webhook-actions">
+                                                        {% for action in webhook.actions %}
+                                                            {% if "Detected URL:" in action %}
+                                                                {% set url = action.split("Detected URL: ")[1] %}
+                                                                <li>Detected URL: <span class="clickable-copy url-text" title="点击复制URL">{{ url }}</span></li>
+                                                            {% else %}
+                                                                <li>{{ action }}</li>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                {% else %}
+                                                    <span class="text-muted">No actions</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center p-4">
+                                <i class="fas fa-inbox fa-3x mb-3 text-muted"></i>
+                                <p class="lead text-muted">No webhooks received yet</p>
+                                <p>Send a webhook to the endpoint or use the test form to get started</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
